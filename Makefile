@@ -33,8 +33,8 @@ MAKEFLAGS += -s
 CC = gcc
 
 all:
-	make -C $(LIB_DIR)
-	make $(NAME)
+	$(MAKE) -C $(LIB_DIR)
+	$(MAKE) $(NAME)
 	printf "${_BOLD}${_BLUE}[$(NAME) ${_GREEN}ok${_BLUE}]${_DEFAULT}\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -48,7 +48,8 @@ update:
 	printf "${_BOLD}${_BLUE}[$(NAME)]${_DEFAULT} ./update_script\n"
 	./update_script
 
-$(NAME): update $(OBJS)
+$(NAME): $(OBJS)
+	$(MAKE) update
 	rm -rf woody
 	printf "${_BOLD}${_BLUE}[$(NAME)]${_DEFAULT} rm -rf woody\n"
 	nasm -felf64 $(ASM_DIR)/$(SRC_ASM)
@@ -58,12 +59,12 @@ $(NAME): update $(OBJS)
 
 clean:
 	rm -rf $(OBJ_DIR)
-	make $@ -C $(LIB_DIR)
+	$(MAKE) $@ -C $(LIB_DIR)
 
 fclean: clean
 	rm -rf woody
 	rm -rf $(NAME)
-	make $@ -C $(LIB_DIR)
+	$(MAKE) $@ -C $(LIB_DIR)
 
 re:
 	$(MAKE) fclean
