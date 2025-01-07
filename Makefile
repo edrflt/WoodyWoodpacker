@@ -1,4 +1,10 @@
-NAME = ./woody_woodpacker
+_RED=\033[31m
+_GREEN=\033[32m
+_BLUE=\033[34m
+_BOLD=\033[1m
+_DEFAULT=\033[0m
+
+NAME = woody_woodpacker
 
 SRC = main.c error_input.c parser.c woody.c elf.c code_cave.c expand.c creat_segment.c
 SRC_ASM = rc4.asm
@@ -22,35 +28,43 @@ LFT = $(LIB_DIR)/$(LIBFT)
 LIB = -L $(LIB_DIR) -l$(LIBFT:lib%.a=%)
 
 FLG = -Wno-format -Wall -Werror -Wextra
+MAKEFLAGS += -s
 
 CC = gcc
 
 all:
-	@make -C $(LIB_DIR)
-	@make $(NAME)
+	make -C $(LIB_DIR)
+	make $(NAME)
+	printf "${_BOLD}${_BLUE}[$(NAME) ${_GREEN}ok${_BLUE}]${_DEFAULT}\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
-	gcc $(FLG) -I $(INC_DIR) -o $@ -c -fPIC $<
+	mkdir -p $(OBJ_DIR)
+	printf "${_BOLD}${_BLUE}[$(NAME)]${_DEFAULT} $(CC) $(FLG) -I $(INC_DIR) -o $@ -c -fPIC $<\n"
+	$(CC) $(FLG) -I $(INC_DIR) -o $@ -c -fPIC $<
 
 $(OBJS): $(HEAD)
 
 update:
-	@./update_script
+	printf "${_BOLD}${_BLUE}[$(NAME)]${_DEFAULT} ./update_script\n"
+	./update_script
 
 $(NAME): update $(OBJS)
-	@rm -rf woody
+	rm -rf woody
+	printf "${_BOLD}${_BLUE}[$(NAME)]${_DEFAULT} rm -rf woody\n"
 	nasm -felf64 $(ASM_DIR)/$(SRC_ASM)
+	printf "${_BOLD}${_BLUE}[$(NAME)]${_DEFAULT} nasm -felf64 $(ASM_DIR)/$(SRC_ASM)\n"
 	clang $(ASM_DIR)/rc4.o $(OBJS) -o $@ $(LIB)
+	printf "${_BOLD}${_BLUE}[$(NAME)]${_DEFAULT} clang $(ASM_DIR)/rc4.o $(OBJS) -o $@ $(LIB)\n"
 
 clean:
-	@rm -rf $(OBJ_DIR)
-	@make $@ -C $(LIB_DIR)
+	rm -rf $(OBJ_DIR)
+	make $@ -C $(LIB_DIR)
 
 fclean: clean
-	@rm -rf woody
-	@rm -rf $(NAME)
-	@make $@ -C $(LIB_DIR)
+	rm -rf woody
+	rm -rf $(NAME)
+	make $@ -C $(LIB_DIR)
 
-re: fclean all
-
+re:
+	$(MAKE) fclean
+	$(MAKE) all
