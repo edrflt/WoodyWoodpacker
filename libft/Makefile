@@ -10,6 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
+_GREEN=\033[32m
+_PURPLE=\033[35m
+_BOLD=\033[1m
+_DEFAULT=\033[0m
+
 NAME = libft.a
 
 SRC = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c \
@@ -51,12 +56,14 @@ all:
 	@mkdir -p ./obj
 	@mkdir -p ./obj/printf
 	@make $(NAME)
+	printf "${_BOLD}${_PURPLE}[libft ${_GREEN}ok${_PURPLE}]${_DEFAULT}\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	printf "${_BOLD}${_PURPLE}[libft]${_DEFAULT} gcc $(FLG) -I $(HEAD_DIR) -o $@ -c $<\n"
 	gcc $(FLG) -I $(HEAD_DIR) -o $@ -c $<
 
 $(NAME): $(OBJ_PATH)
-	@echo creat $(NAME)
+	@echo create $(NAME)
 	@ar rc $@ $(OBJ_PATH)
 
 clean:
