@@ -43,8 +43,15 @@ function update()
 		shellcode="$shellcode$i"
 	done
 	shellsize=$(for i in $(objdump -d $obj | grep "^ "| cut -f2); do echo $i; done | wc -l)
-	sed -i "s/$def.*/$def \"${shellcode}\"/" $inc
-	sed -i "s/$size.*/$size ${shellsize}/" $inc
+    if ! grep -q "$def \"$shellcode\"" $inc; then
+            sed -i "s/$def.*/$def \"${shellcode}\"/" $inc
+    fi
+
+    if ! grep -q "$size ${shellsize}" $inc; then
+            sed -i "s/$size.*/$size ${shellsize}/" $inc
+    fi
+	#sed -i "s/$def.*/$def \"${shellcode}\"/" $inc
+	#sed -i "s/$size.*/$size ${shellsize}/" $inc
 }
 
 if [ $# -ne 0 ]
