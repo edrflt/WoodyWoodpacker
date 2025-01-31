@@ -37,7 +37,7 @@ all:
 	$(MAKE) $(NAME)
 	printf "${_BOLD}${_BLUE}[$(NAME) ${_GREEN}ok${_BLUE}]${_DEFAULT}\n"
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEAD)
 	mkdir -p $(OBJ_DIR)
 	printf "${_BOLD}${_BLUE}[$(NAME)]${_DEFAULT} $(CC) $(FLG) -I $(INC_DIR) -o $@ -c -fPIC $<\n"
 	$(CC) $(FLG) -I $(INC_DIR) -o $@ -c -fPIC $<
